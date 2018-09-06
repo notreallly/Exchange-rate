@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/index.js"></script>
+<script src="js/Chart.min.js"></script>
+<title>Exchange-rate</title>
+</head>
+<body>
+	<select id="Select">
+		<option value="CNY">人民幣(CNY)</option>
+		<option selected="selected" value="USD">美元(USD)</option>
+		<option value="AUD">澳幣(AUD)</option>
+		<option value="EUR">歐元(EUR)</option>
+		<option value="JPY">日圓(JPY)</option>
+		<option value="GBP">英鎊(GBP)</option>
+	</select>
+	<div class="content" style="width: 70%;">
+		<canvas id="lineChart"></canvas>
+	</div>
+	<script>
+		var datasell, databuy, datadate;
+		var currencyName;
+
+		//畫圖
+		function drawChart(datasell, databuy, datadate) {
+			var ctxL = document.getElementById("lineChart").getContext('2d');
+			var LineChart = new Chart(ctxL, {
+				type : 'line',
+				data : {
+					labels : datadate,
+					datasets : [ {
+						label : "賣匯",
+						fill : false,
+						borderColor : "rgba(255,130,71,1)",
+						borderWidth : 5,
+						pointBorderWidth : 0,
+						data : datasell
+					}, {
+						label : "買匯",
+						fill : false,
+						borderColor : "rgba(99,184,255,1)",
+						borderWidth : 5,
+						pointBorderWidth : 0,
+						data : databuy
+					} ]
+				},
+				options : {
+					responsive : true,
+					title : {
+						display : true,
+						text : currencyName + '歷史匯率'
+					},
+					elements : {
+						line : {
+							tension : 0
+						}
+					}
+				}
+			});
+		}
+
+		// 取得資料
+		function getJsonChart(pram) {
+			datasell = new Array();
+			databuy = new Array();
+			datadate = new Array();
+
+			$.post("GetJsonChart", {
+				currency : pram
+			}, function(response) {
+				for ( var e in response) {
+					datadate.push(response[e].DATE);
+					databuy.push(response[e].BUY);
+					datasell.push(response[e].SELL);
+				}
+				clearCanvas();
+				drawChart(datasell, databuy, datadate);
+			}, "json");
+		}
+
+		function clearCanvas() {
+			$('#lineChart').remove();
+			$('.content').append('<canvas id="lineChart"></canvas>');
+		}
+	</script>
+</body>
+</html>
