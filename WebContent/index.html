@@ -35,6 +35,7 @@
 						fill : false,
 						borderColor : "rgba(255,130,71,1)",
 						borderWidth : 5,
+						pointBackgroundColor: "rgba(255,130,71,1)",
 						pointBorderWidth : 0,
 						data : datasell
 					}, {
@@ -42,6 +43,7 @@
 						fill : false,
 						borderColor : "rgba(99,184,255,1)",
 						borderWidth : 5,
+						pointBackgroundColor: "rgba(99,184,255,1)",
 						pointBorderWidth : 0,
 						data : databuy
 					} ]
@@ -80,6 +82,7 @@
 			}, "json");
 		}
 
+		//清除canvas
 		function clearCanvas() {
 			$('#lineChart').remove();
 			$('.content').append('<canvas id="lineChart"></canvas>');

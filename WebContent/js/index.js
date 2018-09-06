@@ -6,7 +6,5 @@ $(document).ready(function() {
 		var val = seletedCurrency.val();
 		
 		getJsonChart(val);
-		
 	});
-
 });
